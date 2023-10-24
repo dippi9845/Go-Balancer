@@ -48,3 +48,13 @@ type ServerPool struct {
 	backends []*Backend
 	current  uint64
 }
+
+// AddBackend to the server pool
+func (s *ServerPool) AddBackend(backend *Backend) {
+	s.backends = append(s.backends, backend)
+}
+
+// NextIndex atomically increase the counter and return an index
+func (s *ServerPool) NextIndex() int {
+	return int(atomic.AddUint64(&s.current, uint64(1)) % uint64(len(s.backends)))
+}
