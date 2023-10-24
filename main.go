@@ -85,3 +85,16 @@ func (s *ServerPool) GetNextPeer() *Backend {
 	}
 	return nil
 }
+
+// HealthCheck pings the backends and update the status
+func (s *ServerPool) HealthCheck() {
+	for _, b := range s.backends {
+		status := "up"
+		alive := isBackendAlive(b.URL)
+		b.SetAlive(alive)
+		if !alive {
+			status = "down"
+		}
+		log.Printf("%s [%s]\n", b.URL, status)
+	}
+}
