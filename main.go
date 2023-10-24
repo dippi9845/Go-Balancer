@@ -42,3 +42,9 @@ func (b *Backend) IsAlive() (alive bool) {
 	b.mux.RUnlock()
 	return
 }
+
+// ServerPool holds information about reachable backends
+type ServerPool struct {
+	backends []*Backend
+	current  uint64
+}
